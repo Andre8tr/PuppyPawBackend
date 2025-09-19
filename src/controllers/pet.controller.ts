@@ -28,7 +28,7 @@ const getPetById = async (req: Request, res: Response) => {
   try {
     const idPet = req.params.id
     console.log(idPet)
-    const petById = Pet.findById(idPet)
+    const petById = await Pet.findById(idPet)
     if (!petById) res.status(404).json({ msg: 'No se encontro la mascota' })
     res.status(200).json(petById)
   } catch (error) {
@@ -36,4 +36,39 @@ const getPetById = async (req: Request, res: Response) => {
   }
 }
 
-export { getPets, getPetById }
+/*
+  POST /api/v1/pets
+  Crear una nueva mascota
+*/
+
+const createNewPet = async (req: Request, res: Response) => {
+  try {
+    const newPet = new Pet(req.body)
+    const savedPet = await newPet.save()
+    res.status(201).json({ savedPet })
+  } catch (error) {
+    res.status(400).json(error)
+  }
+}
+
+/* 
+  PUT /api/v1/pet
+  Se actualiza la mascota
+*/
+const updatePet = async (req: Request, res: Response) => {
+  try {
+    const petId = req.params.id
+    const updatedPet = await Pet.findByIdAndUpdate(petId, req.body, {
+      new: true,
+      runValidators: true,
+    })
+    if (!updatedPet) {
+      return res.status(404).json({ message: 'Mascota no encontrada' })
+    }
+    res.status(200).json(updatedPet)
+  } catch (error) {
+    res.status(400).json({ message: 'Error al actualizar la mascota', error })
+  }
+}
+
+export { getPets, getPetById, createNewPet, updatePet }
