@@ -1,6 +1,7 @@
 import experss from 'express'
 import cors from 'cors'
 import dotenv from 'dotenv'
+import helmet from 'helmet'
 import petRoutes from './routes/v1/pet.routes'
 
 //Cargar Dot Env
@@ -9,7 +10,8 @@ dotenv.config()
 const app = experss()
 
 //Middlewares
-app.use(cors())
+app.use(cors()) //TODO: crear un white list
+app.use(helmet())
 app.use(experss.json())
 
 //Ruta de healt

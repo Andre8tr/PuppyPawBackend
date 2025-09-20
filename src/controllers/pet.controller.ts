@@ -1,6 +1,5 @@
 import { Request, Response } from 'express'
 import { Pet } from '../models/pet.model'
-import { log } from 'node:console'
 
 /*
   GET /api/v1/pets
@@ -51,6 +50,22 @@ const createNewPet = async (req: Request, res: Response) => {
   }
 }
 
+/*
+  PATCH /api/v1/pet
+  Se inactiva una macota
+*/
+
+const inactivePet = async (req: Request, res: Response) => {
+  try {
+    const idPet = req.params.id
+    const setPet = await Pet.findByIdAndUpdate(idPet, { inactive: true })
+    if (!setPet) res.status(404).json({ msg: 'Mascota no encontrada' })
+    res.status(200).json({ msg: 'Mascota marcada como inactiva', setPet })
+  } catch (error) {
+    res.status(500).json(error)
+  }
+}
+
 /* 
   PUT /api/v1/pet
   Se actualiza la mascota
@@ -71,4 +86,4 @@ const updatePet = async (req: Request, res: Response) => {
   }
 }
 
-export { getPets, getPetById, createNewPet, updatePet }
+export { getPets, getPetById, createNewPet, updatePet, inactivePet }

@@ -4,6 +4,7 @@ import {
   getPetById,
   createNewPet,
   updatePet,
+  inactivePet,
 } from '../../controllers/pet.controller'
 
 const router = Router()
@@ -18,5 +19,9 @@ router.get('/:id', getPetById)
 router.post('/', createNewPet)
 
 //Update a existing pet
-router.get('/', updatePet)
+router.put('/', updatePet)
+
+//PATCH to inactive a pet
+router.patch('/', inactivePet)
+
 export default router
